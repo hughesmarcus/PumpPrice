@@ -6,6 +6,7 @@ Goals for this application
 - Allow users to save favorite stations
 - Allow user to compare prices
 - Allow user to view price history.
+- User Retrofit2,RxAndroid,Dagger2 and other tools together.
 
 
 
