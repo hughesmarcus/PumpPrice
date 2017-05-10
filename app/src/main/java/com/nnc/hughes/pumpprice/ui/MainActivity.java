@@ -1,7 +1,9 @@
-package com.nnc.hughes.pumpprice;
+package com.nnc.hughes.pumpprice.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.nnc.hughes.pumpprice.R;
 
 public class MainActivity extends AppCompatActivity {
 
