@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Stations {
 
-    @SerializedName("results")
+    @SerializedName("stations")
     private List<Station> stations = new ArrayList<>();
 
     public List<Station> getStations() {
