@@ -6,9 +6,11 @@ package com.nnc.hughes.pumpprice.app;
 
 public class Constants {
 
-    public static final String BASE_URL = "http://devapi.mygasfeed.com";
+    //public static final String BASE_URL = "http://devapi.mygasfeed.com";
+    public static final String BASE_URL = "http://api.mygasfeed.com";
 
-    public static final String API_KEY = "rfej9napna";
+    //public static final String API_KEY = "rfej9napna";
+    public static final String API_KEY = "0tgarntmf9";
 
     public static final String SUGAR_NUTRIENT = "269";
 

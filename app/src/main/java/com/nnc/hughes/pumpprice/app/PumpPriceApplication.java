@@ -27,6 +27,9 @@ import android.app.Application;
 import com.nnc.hughes.pumpprice.dagger.AppComponent;
 import com.nnc.hughes.pumpprice.dagger.AppModule;
 import com.nnc.hughes.pumpprice.dagger.DaggerAppComponent;
+import com.nnc.hughes.pumpprice.dagger.NetworkModule;
+
+import java.io.File;
 
 
 public class PumpPriceApplication extends Application {
@@ -36,9 +39,12 @@ public class PumpPriceApplication extends Application {
     return appComponent;
   }
   protected AppComponent initDagger(PumpPriceApplication application) {
+    File cacheFile = new File(application.getCacheDir(), "responses");
     return DaggerAppComponent.builder()
             .appModule(new AppModule(application))
+            .networkModule(new NetworkModule(cacheFile))
             .build();
+
   }
   @Override
   public void onCreate() {
