@@ -41,6 +41,11 @@ public class StationListAdapater extends RecyclerView.Adapter<StationListAdapate
     public void onBindViewHolder(StationListAdapater.ViewHolder holder, int position) {
         holder.click(data.get(position), listener);
         holder.price.setText(data.get(position).getRegPrice());
+        holder.station.setText(data.get(position).getStation());
+        holder.distance.setText(data.get(position).getDistance());
+        holder.address.setText(data.get(position).getAddress());
+        holder.time.setText(data.get(position).getRegDate());
+
 
 
 
@@ -62,13 +67,19 @@ public class StationListAdapater extends RecyclerView.Adapter<StationListAdapate
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView price;
+        TextView station;
+        TextView distance;
+        TextView address;
+        TextView time;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            price = (TextView) itemView.findViewById(R.id.price);
-
-
+            price = (TextView) itemView.findViewById(R.id.reg_price);
+            distance = (TextView) itemView.findViewById(R.id.distance);
+            address = (TextView) itemView.findViewById(R.id.address);
+            time = (TextView) itemView.findViewById(R.id.time);
+            station = (TextView) itemView.findViewById(R.id.station);
 
         }
 

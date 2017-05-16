@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PumpPrice</string>
+    <string name="miles">mi</string>
 </resources>
