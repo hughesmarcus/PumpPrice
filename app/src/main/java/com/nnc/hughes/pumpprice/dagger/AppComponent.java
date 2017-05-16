@@ -1,6 +1,9 @@
 package com.nnc.hughes.pumpprice.dagger;
 
 
+import com.nnc.hughes.pumpprice.ui.GasListPresenter;
+import com.nnc.hughes.pumpprice.ui.MainActivity;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -11,9 +14,9 @@ import dagger.Component;
 
 
 @Singleton
-@Component(modules = {AppModule.class})
+@Component(modules = {AppModule.class, PresenterModule.class, NetworkModule.class})
 public interface AppComponent {
 
-
+    void inject(MainActivity target);
+    //void inject(GasListPresenter target);
 }
-

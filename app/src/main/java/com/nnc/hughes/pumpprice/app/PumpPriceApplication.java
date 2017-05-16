@@ -26,7 +26,7 @@ import android.app.Application;
 
 import com.nnc.hughes.pumpprice.dagger.AppComponent;
 import com.nnc.hughes.pumpprice.dagger.AppModule;
-
+import com.nnc.hughes.pumpprice.dagger.DaggerAppComponent;
 
 
 public class PumpPriceApplication extends Application {
