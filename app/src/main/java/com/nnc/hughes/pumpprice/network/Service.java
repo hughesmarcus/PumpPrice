@@ -28,9 +28,9 @@ public class Service {
         this.gasAPI = gasAPI;
     }
 
-    public Subscription getStationsList(final GetCityListCallback callback) {
+    public Subscription getStationsList(final GetCityListCallback callback, String lat, String log) {
 
-        return gasAPI.getStationsList("33.4834075","-84.3500434","10","reg","price")
+        return gasAPI.getStationsList(lat,log,"10","reg","price")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorResumeNext(new Func1<Throwable, Observable<? extends StationsListResponse>>() {

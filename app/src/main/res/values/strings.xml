@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">PumpPrice</string>
     <string name="miles">mi</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Enter Location</string>
+    <string name="filter_title">Filter</string>
+    <string name="service_not_available">PumpPrice</string>
+    <string name="invalid_lat_long_used">mi</string>
+    <string name="no_address_found">Search</string>
+    <string name="address_found">Enter Location</string>
 </resources>

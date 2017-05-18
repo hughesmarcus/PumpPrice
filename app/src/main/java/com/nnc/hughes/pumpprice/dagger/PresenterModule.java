@@ -1,7 +1,5 @@
 package com.nnc.hughes.pumpprice.dagger;
 
-import android.content.Context;
-
 import com.nnc.hughes.pumpprice.network.Service;
 import com.nnc.hughes.pumpprice.ui.GasListPresenter;
 import com.nnc.hughes.pumpprice.ui.GasListView;
