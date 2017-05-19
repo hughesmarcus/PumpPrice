@@ -11,11 +11,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 
@@ -40,63 +35,87 @@ import butterknife.BindView
 import butterknife.ButterKnife
 
 import android.R.attr.tag
+import android.view.*
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
+import com.nnc.hughes.pumpprice.data.GasPalPreferences
+import com.nnc.hughes.pumpprice.ui.station.DetailActivity
 
 class MainActivity : AppCompatActivity(), GasListView {
-    private var list: RecyclerView? = null
+    private lateinit var list: RecyclerView
     @Inject
     lateinit var service: Service
     lateinit var presenter: GasListPresenter
     internal lateinit var progressBar: ProgressBar
+    var PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
+    private val mBundleRecyclerViewState: Bundle? = null
+    private val KEY_RECYCLER_STATE = "recycler_state"
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (application as PumpPriceApplication).appComponent.inject(this)
         renderView()
         init()
+        val coords = GasPalPreferences.getLocationCoordinates(this)
         presenter = GasListPresenter(service!!, this)
-        presenter.getStationList("33.4834075", "-84.3500434")
+        presenter.getStationList(coords[0], coords[1])
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.options_menu, menu)
-
-        // Associate searchable configuration with the SearchView
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(componentName))
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null && query != "") {
-                    var addressList: List<android.location.Address>? = null
-                    val geocoder = Geocoder(this@MainActivity)
-                    try {
-                        addressList = geocoder.getFromLocationName(query, 1)
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-
-                    val address = addressList!![0]
-                    val latLng = LatLng(address.latitude, address.longitude)
-                    Log.e(TAG, java.lang.Double.toString(address.latitude))
-                    presenter.getStationList(java.lang.Double.toString(address.latitude), java.lang.Double.toString(address.longitude))
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-
-
-                return false
-
-            }
-
-        })
         return true
     }
 
+   override fun onOptionsItemSelected(item:MenuItem):Boolean {
+        /* Get the ID of the clicked item */
+        val id = item.getItemId()
+        /* Settings menu item clicked */
+        if (id == R.id.search)
+        {
+            try
+            {
+                val intent = PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                        .build(this)
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+            }
+            catch (e: GooglePlayServicesRepairableException) {
+                // TODO: Handle the error.
+            }
+            catch (e: GooglePlayServicesNotAvailableException) {
+                // TODO: Handle the error.
+            }
+            return true
+        }
 
+        return super.onOptionsItemSelected(item)
+    }
+
+    override protected fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                val place = PlaceAutocomplete.getPlace(this, data)
+                Log.i(TAG, "Place: " + place.getName())
+                GasPalPreferences.resetLocationCoordinates(this)
+                GasPalPreferences.setLocationDetails(this,java.lang.Double.toString(place.latLng.latitude), java.lang.Double.toString(place.latLng.longitude))
+                presenter.getStationList(java.lang.Double.toString(place.latLng.latitude), java.lang.Double.toString(place.latLng.longitude))
+
+            }
+            else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
+            {
+                val status = PlaceAutocomplete.getStatus(this, data)
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage())
+            }
+            else if (resultCode == RESULT_CANCELED)
+            {
+                // The user canceled the operation.
+            }
+        }
+    }
     fun renderView() {
         setContentView(R.layout.activity_main)
         list = findViewById(R.id.activity_stations_recyclerView) as RecyclerView
@@ -125,7 +144,9 @@ class MainActivity : AppCompatActivity(), GasListView {
     override fun onFailure(appErrorMessage: String) {
 
     }
-
+    fun launchStationDetail(station:Station) {
+        DetailActivity.launch(this, station)
+    }
     override fun getStationListSuccess(stationsListResponse: StationsListResponse?) {
         if (stationsListResponse != null && stationsListResponse.data != null && stationsListResponse.data.size > 0) {
             Log.d("Hello", Integer.toString(stationsListResponse.data.size))
@@ -133,6 +154,7 @@ class MainActivity : AppCompatActivity(), GasListView {
 
                     object : StationListAdapater.OnItemClickListener {
                         override fun onClick(Item: Station) {
+                            launchStationDetail(Item)
                             Toast.makeText(applicationContext, Item.station,
                                     Toast.LENGTH_LONG).show()
                         }
