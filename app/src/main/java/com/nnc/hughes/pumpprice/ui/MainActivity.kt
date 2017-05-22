@@ -1,24 +1,16 @@
 package com.nnc.hughes.pumpprice.ui
 
-import android.app.SearchManager
+
 import android.content.Context
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
 
-
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.nnc.hughes.pumpprice.R
 import com.nnc.hughes.pumpprice.app.Constants
 import com.nnc.hughes.pumpprice.app.PumpPriceApplication
@@ -34,14 +26,17 @@ import com.nnc.hughes.pumpprice.network.GasAPI
 import butterknife.BindView
 import butterknife.ButterKnife
 
-import android.R.attr.tag
+import android.support.design.widget.BottomNavigationView
 import android.view.*
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
+import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import com.nnc.hughes.pumpprice.data.GasPalPreferences
 import com.nnc.hughes.pumpprice.ui.station.DetailActivity
-
 class MainActivity : AppCompatActivity(), GasListView {
     private lateinit var list: RecyclerView
     @Inject
@@ -54,12 +49,52 @@ class MainActivity : AppCompatActivity(), GasListView {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         (application as PumpPriceApplication).appComponent.inject(this)
+        initNavigation()
         renderView()
         init()
+        initSearch()
         val coords = GasPalPreferences.getLocationCoordinates(this)
         presenter = GasListPresenter(service!!, this)
         presenter.getStationList(coords[0], coords[1])
+    }
+    fun initSearch(){
+        val autocompleteFragment = getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
+        autocompleteFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
+          override  fun onPlaceSelected(place: Place) {
+              GasPalPreferences.resetLocationCoordinates(this@MainActivity)
+              GasPalPreferences.setLocationDetails(this@MainActivity,java.lang.Double.toString(place.latLng.latitude), java.lang.Double.toString(place.latLng.longitude))
+              presenter.getStationList(java.lang.Double.toString(place.latLng.latitude), java.lang.Double.toString(place.latLng.longitude))
+            }
+           override fun onError(status: Status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status)
+            }
+        })
+    }
+    fun initNavigation() {
+
+
+        val navigationView = findViewById(R.id.bottom_navigation) as? BottomNavigationView
+        navigationView?.setOnNavigationItemSelectedListener { menuItem ->
+            val id = menuItem.itemId
+            when (id) {
+                R.id.home_screen -> {
+                    Toast.makeText(applicationContext, "You Clicked Home", Toast.LENGTH_SHORT).show()
+
+                }
+                R.id.stations_screen -> {
+                    Toast.makeText(applicationContext, "You Clicked Stations", Toast.LENGTH_SHORT).show()
+
+                }
+                R.id.profile_screen -> {
+                    Toast.makeText(applicationContext, "You Clicked Profile", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+            true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -11,4 +11,8 @@
     <string name="pref_location_label">Location</string>
     <string name="pref_location_key" translatable="false">location</string>
     <string name="pref_location_default" translatable="false">Mountain View, CA 94043</string>
+    <string name="map_screen">Map</string>
+    <string name="home_screen">Home</string>
+    <string name="stations_screen">Stations</string>
+    <string name="profile_screen">Profile</string>
 </resources>
