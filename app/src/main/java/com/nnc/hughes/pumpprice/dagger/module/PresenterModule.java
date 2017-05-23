@@ -1,6 +1,5 @@
-package com.nnc.hughes.pumpprice.dagger;
+package com.nnc.hughes.pumpprice.dagger.module;
 
-import com.nnc.hughes.pumpprice.network.Service;
 import com.nnc.hughes.pumpprice.ui.GasListPresenter;
 import com.nnc.hughes.pumpprice.ui.GasListView;
 
@@ -16,8 +15,8 @@ import dagger.Provides;
 public class PresenterModule {
     @Provides
     @Singleton
-    GasListPresenter provideGasListPresenter(Service service, GasListView view) {
-        return new GasListPresenter(service, view);
+    GasListPresenter provideGasListPresenter(GasListView view) {
+        return new GasListPresenter(view, null);
     }
 
 }

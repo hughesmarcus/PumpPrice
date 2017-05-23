@@ -15,9 +15,10 @@ public class StationsListResponse {
     @SerializedName("status")
     @Expose
     private Status status;
+
     @SerializedName("geoLocation")
     @Expose
-    private GeoLocation geoLocation;
+    private transient GeoLocation geoLocation;
     @SerializedName("stations")
     @Expose
     private List<Station> stations = null;

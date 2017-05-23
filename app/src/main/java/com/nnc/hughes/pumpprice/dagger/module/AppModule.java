@@ -1,4 +1,4 @@
-package com.nnc.hughes.pumpprice.dagger;
+package com.nnc.hughes.pumpprice.dagger.module;
 
 import android.app.Application;
 import android.content.Context;

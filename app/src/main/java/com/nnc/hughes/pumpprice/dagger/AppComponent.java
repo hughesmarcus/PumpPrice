@@ -2,6 +2,9 @@ package com.nnc.hughes.pumpprice.dagger;
 
 
 
+import com.nnc.hughes.pumpprice.dagger.module.AppModule;
+import com.nnc.hughes.pumpprice.dagger.module.NetworkModule;
+import com.nnc.hughes.pumpprice.dagger.module.PresenterModule;
 import com.nnc.hughes.pumpprice.ui.MainActivity;
 
 import javax.inject.Singleton;

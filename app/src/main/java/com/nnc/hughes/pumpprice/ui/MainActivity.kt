@@ -1,7 +1,6 @@
 package com.nnc.hughes.pumpprice.ui
 
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,19 +11,13 @@ import android.widget.ProgressBar
 import android.widget.Toast
 
 import com.nnc.hughes.pumpprice.R
-import com.nnc.hughes.pumpprice.app.Constants
 import com.nnc.hughes.pumpprice.app.PumpPriceApplication
 import com.nnc.hughes.pumpprice.model.Station
 import com.nnc.hughes.pumpprice.model.StationsListResponse
-import com.nnc.hughes.pumpprice.network.Service
 
-import java.io.IOException
 import java.util.ArrayList
 
 import javax.inject.Inject
-import com.nnc.hughes.pumpprice.network.GasAPI
-import butterknife.BindView
-import butterknife.ButterKnife
 
 import android.support.design.widget.BottomNavigationView
 import android.view.*
@@ -36,11 +29,12 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import com.nnc.hughes.pumpprice.data.GasPalPreferences
+import com.nnc.hughes.pumpprice.network.GasAPI
 import com.nnc.hughes.pumpprice.ui.station.DetailActivity
 class MainActivity : AppCompatActivity(), GasListView {
     private lateinit var list: RecyclerView
     @Inject
-    lateinit var service: Service
+    lateinit var gasApi: GasAPI
     lateinit var presenter: GasListPresenter
     internal lateinit var progressBar: ProgressBar
     var PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
@@ -50,19 +44,20 @@ class MainActivity : AppCompatActivity(), GasListView {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        (application as PumpPriceApplication).appComponent.inject(this)
+        (application as PumpPriceApplication).appComponent!!.inject(this)
         initNavigation()
         renderView()
         init()
         initSearch()
         val coords = GasPalPreferences.getLocationCoordinates(this)
-        presenter = GasListPresenter(service!!, this)
+        presenter = GasListPresenter(this, gasApi)
         presenter.getStationList(coords[0], coords[1])
     }
     fun initSearch(){
         val autocompleteFragment = getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
         autocompleteFragment.setOnPlaceSelectedListener(object: PlaceSelectionListener {
           override  fun onPlaceSelected(place: Place) {
+              showWait()
               GasPalPreferences.resetLocationCoordinates(this@MainActivity)
               GasPalPreferences.setLocationDetails(this@MainActivity,java.lang.Double.toString(place.latLng.latitude), java.lang.Double.toString(place.latLng.longitude))
               presenter.getStationList(java.lang.Double.toString(place.latLng.latitude), java.lang.Double.toString(place.latLng.longitude))
@@ -97,35 +92,6 @@ class MainActivity : AppCompatActivity(), GasListView {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.options_menu, menu)
-        return true
-    }
-
-   override fun onOptionsItemSelected(item:MenuItem):Boolean {
-        /* Get the ID of the clicked item */
-        val id = item.getItemId()
-        /* Settings menu item clicked */
-        if (id == R.id.search)
-        {
-            try
-            {
-                val intent = PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                        .build(this)
-                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
-            }
-            catch (e: GooglePlayServicesRepairableException) {
-                // TODO: Handle the error.
-            }
-            catch (e: GooglePlayServicesNotAvailableException) {
-                // TODO: Handle the error.
-            }
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 
     override protected fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE)
@@ -152,7 +118,6 @@ class MainActivity : AppCompatActivity(), GasListView {
         }
     }
     fun renderView() {
-        setContentView(R.layout.activity_main)
         list = findViewById(R.id.activity_stations_recyclerView) as RecyclerView
         progressBar = findViewById(R.id.activity_stations_progressBar) as ProgressBar
     }
@@ -183,12 +148,14 @@ class MainActivity : AppCompatActivity(), GasListView {
         DetailActivity.launch(this, station)
     }
     override fun getStationListSuccess(stationsListResponse: StationsListResponse?) {
+        removeWait()
         if (stationsListResponse != null && stationsListResponse.data != null && stationsListResponse.data.size > 0) {
             Log.d("Hello", Integer.toString(stationsListResponse.data.size))
             val adapter = StationListAdapater(applicationContext, stationsListResponse.data,
 
                     object : StationListAdapater.OnItemClickListener {
                         override fun onClick(Item: Station) {
+
                             launchStationDetail(Item)
                             Toast.makeText(applicationContext, Item.station,
                                     Toast.LENGTH_LONG).show()

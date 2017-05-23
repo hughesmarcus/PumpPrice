@@ -30,6 +30,10 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".ui.station.DetailActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="edb772fbc17947f2f1da92214905346dcd19129e"
+            />
     </application>
 
 </manifest>

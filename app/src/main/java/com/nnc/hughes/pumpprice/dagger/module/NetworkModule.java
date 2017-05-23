@@ -1,26 +1,20 @@
-package com.nnc.hughes.pumpprice.dagger;
+package com.nnc.hughes.pumpprice.dagger.module;
 
 /**
  * Created by marcus on 5/15/17.
  */
 
-import android.app.Application;
-
-import com.nnc.hughes.pumpprice.BuildConfig;
 import com.nnc.hughes.pumpprice.app.Constants;
-import com.nnc.hughes.pumpprice.app.PumpPriceApplication;
 import com.nnc.hughes.pumpprice.network.GasAPI;
-import com.nnc.hughes.pumpprice.network.Service;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Response;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.File;
@@ -94,7 +88,7 @@ public class NetworkModule {
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
 
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 
                 .build();
     }
@@ -105,11 +99,5 @@ public class NetworkModule {
         return retrofit.create(GasAPI.class);
     }
 
-    @Provides
-    @Singleton
-    @SuppressWarnings("unused")
-    public Service providesService(
-            GasAPI gasAPI) {
-        return new Service(gasAPI);
-    }
+
 }
