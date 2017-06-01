@@ -1,4 +1,5 @@
 package com.nnc.hughes.pumpprice.network;
+
 import com.nnc.hughes.pumpprice.app.Constants;
 import com.nnc.hughes.pumpprice.model.HistoryListResponse;
 import com.nnc.hughes.pumpprice.model.Station;
@@ -18,9 +19,10 @@ import io.reactivex.Observable;
 
 public interface GasAPI {
     @GET("/stations/radius/{lat}/{long}/{dis}/{fuel}/{sort_by}/0tgarntmf9.json?")
-    Observable<StationsListResponse> getStationsList(@Path("lat") String latitude, @Path("long")String longitude,
+    Observable<StationsListResponse> getStationsList(@Path("lat") String latitude, @Path("long") String longitude,
                                                      @Path("dis") String distance, @Path("fuel") String fuel_type,
                                                      @Path("sort_by") String sortBy);
+
     @GET("/locations/pricehistory/{id}/0tgarntmf9.json?")
-    Observable<HistoryListResponse> getHistoryList(@Path("id")String id);
+    Observable<HistoryListResponse> getHistoryList(@Path("id") String id);
 }

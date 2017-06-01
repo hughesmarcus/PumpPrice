@@ -1,4 +1,4 @@
-package com.nnc.hughes.pumpprice.ui;
+package com.nnc.hughes.pumpprice.ui.stationlist;
 
 import com.nnc.hughes.pumpprice.model.Station;
 import com.nnc.hughes.pumpprice.model.StationsListResponse;

@@ -1,7 +1,7 @@
 package com.nnc.hughes.pumpprice.dagger.module;
 
-import com.nnc.hughes.pumpprice.ui.GasListPresenter;
-import com.nnc.hughes.pumpprice.ui.GasListView;
+import com.nnc.hughes.pumpprice.ui.stationlist.GasListPresenter;
+import com.nnc.hughes.pumpprice.ui.stationlist.GasListView;
 
 import javax.inject.Singleton;
 

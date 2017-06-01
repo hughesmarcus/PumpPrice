@@ -1,20 +1,15 @@
-package com.nnc.hughes.pumpprice.ui
+package com.nnc.hughes.pumpprice.ui.stationlist
 
 /**
  * Created by marcus on 5/17/17.
  */
 
-import com.nnc.hughes.pumpprice.model.StationsListResponse
 import com.nnc.hughes.pumpprice.network.GasAPI
-
-import com.nnc.hughes.pumpprice.network.NetworkError
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.disposables.CompositeDisposable
-
-
 
 
 /**
@@ -31,12 +26,10 @@ class GasListPresenter(private val view: GasListView, private val gasAPI: GasAPI
 
     fun getStationList(lat: String, log: String) {
 
-        compositeDisposable!!.add(gasAPI.getStationsList(lat,log,"10","reg","price")
+        compositeDisposable!!.add(gasAPI.getStationsList(lat, log, "10", "reg", "price")
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({stationsListResponse -> view.getStationListSuccess(stationsListResponse)}))
-
-
+                .subscribe({ stationsListResponse -> view.getStationListSuccess(stationsListResponse) }))
 
 
     }

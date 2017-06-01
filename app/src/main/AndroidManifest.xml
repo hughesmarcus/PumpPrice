@@ -18,7 +18,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUsi_6RiuF0zD-lC-BbyVvlHBFadoSUAY" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.stationlist.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,11 +29,13 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".ui.station.DetailActivity"></activity>
+        <activity android:name=".ui.station.DetailActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="edb772fbc17947f2f1da92214905346dcd19129e"
-            />
+            android:value="edb772fbc17947f2f1da92214905346dcd19129e" />
+
+        <activity android:name=".ui.map.MapActivity" />
     </application>
 
 </manifest>

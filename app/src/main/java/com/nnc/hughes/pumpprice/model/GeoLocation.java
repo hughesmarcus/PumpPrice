@@ -7,11 +7,11 @@ package com.nnc.hughes.pumpprice.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GeoLocation implements Parcelable
-{
+public class GeoLocation implements Parcelable {
 
     @SerializedName("city_id")
     @Expose
@@ -56,8 +56,7 @@ public class GeoLocation implements Parcelable
             return (new GeoLocation[size]);
         }
 
-    }
-            ;
+    };
 
     public String getCityId() {
         return cityId;

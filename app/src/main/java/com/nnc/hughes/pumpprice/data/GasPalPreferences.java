@@ -20,9 +20,10 @@ public class GasPalPreferences {
         SharedPreferences.Editor editor = sp.edit();
 
         editor.putString(PREF_COORD_LAT, lat);
-        editor.putString(PREF_COORD_LONG,lon);
+        editor.putString(PREF_COORD_LONG, lon);
         editor.apply();
     }
+
     public static void resetLocationCoordinates(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
@@ -40,6 +41,7 @@ public class GasPalPreferences {
 
         return sp.getString(keyForLocation, defaultLocation);
     }
+
     public static String[] getLocationCoordinates(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 

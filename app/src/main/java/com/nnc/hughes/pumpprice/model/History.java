@@ -7,11 +7,11 @@ package com.nnc.hughes.pumpprice.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class History implements Parcelable
-{
+public class History implements Parcelable {
 
     @SerializedName("type")
     @Expose
@@ -44,8 +44,7 @@ public class History implements Parcelable
             return (new History[size]);
         }
 
-    }
-            ;
+    };
 
     public String getType() {
         return type;

@@ -1,4 +1,4 @@
-package com.nnc.hughes.pumpprice.ui
+package com.nnc.hughes.pumpprice.ui.stationlist
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -15,17 +15,17 @@ import com.nnc.hughes.pumpprice.model.Station
  * Created by marcus on 5/15/17.
  */
 
-class StationListAdapater(private val context: Context, private val data: List<Station>, private val listener: StationListAdapater.OnItemClickListener) : RecyclerView.Adapter<StationListAdapater.ViewHolder>() {
+class StationListAdapater(private val context: Context, private val data: List<Station>, private val listener: OnItemClickListener) : RecyclerView.Adapter<StationListAdapater.ViewHolder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationListAdapater.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.station_list, null)
         view.layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT)
         return ViewHolder(view)
     }
 
 
-    override fun onBindViewHolder(holder: StationListAdapater.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.click(data[position], listener)
         holder.price.text = data[position].regPrice
         holder.station.text = data[position].station

@@ -7,11 +7,11 @@ package com.nnc.hughes.pumpprice.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Station implements Parcelable
-{
+public class Station implements Parcelable {
 
     @SerializedName("country")
     @Expose
@@ -100,8 +100,7 @@ public class Station implements Parcelable
             return (new Station[size]);
         }
 
-    }
-            ;
+    };
 
     public String getCountry() {
         return country;

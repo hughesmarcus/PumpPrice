@@ -36,6 +36,7 @@ public class NetworkModule {
     public NetworkModule(File cacheFile) {
         this.cacheFile = cacheFile;
     }
+
     private static final String NAME_BASE_URL = "NAME_BASE_URL";
 
     @Provides
@@ -49,6 +50,7 @@ public class NetworkModule {
     Converter.Factory provideGsonConverter() {
         return GsonConverterFactory.create();
     }
+
     @Provides
     @Singleton
     Retrofit provideRetrofit(Converter.Factory converter, @Named(NAME_BASE_URL) String baseUrl) {
@@ -70,7 +72,7 @@ public class NetworkModule {
                         Request request = original.newBuilder()
                                 .header("Content-Type", "application/json")
                                 .removeHeader("Pragma")
-                                .header("Cache-Control", String.format("max-age=%d",432000))
+                                .header("Cache-Control", String.format("max-age=%d", 432000))
                                 .build();
 
                         okhttp3.Response response = chain.proceed(request);
